@@ -124,6 +124,7 @@ pub struct Outlook {
     pub subject: String,              // "Subject"
     pub body: String,                 // "Body"
     pub rtf_compressed: String,       // "RtfCompressed"
+    pub html: String,                 // "Html"
     pub attachments: Vec<Attachment>, // See Attachment struct
 }
 
@@ -190,6 +191,7 @@ impl Outlook {
             subject: storages.get_val_from_root_or_default("Subject"),
             body: storages.get_val_from_root_or_default("Body"),
             rtf_compressed: storages.get_val_from_root_or_default("RtfCompressed"),
+            html: storages.get_val_from_root_or_default("Html"),
             attachments: storages
                 .attachments
                 .iter()
