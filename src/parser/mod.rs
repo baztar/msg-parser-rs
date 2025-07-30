@@ -1,10 +1,11 @@
 mod constants;
 mod decode;
+mod error;
+mod message;
+mod outlook;
 mod storage;
 mod stream;
 
-mod error;
+pub use self::message::Outlook;
+pub use self::outlook::{Attachment, Outlook as OldOutlook, Person, TransportHeaders};
 pub use error::{DataTypeError, Error};
-
-mod outlook;
-pub use outlook::{Attachment, Outlook, Person, TransportHeaders};
