@@ -1,48 +1,21 @@
-use std::{
-    io,
-};
+use std::io;
 
-use serde_json::Error as SerdeError;
-
-use thiserror::Error as ThisError;
-
-use crate::ole::Error as OleError;
+use thiserror::Error;
 
 // DataTypeError is used when decode fails in datatype.rs
-#[derive(ThisError, Debug)]
+#[derive(Error, Debug)]
 pub enum DataTypeError {
+    #[error("Unknown value encoding: 0x{0}")]
     UnknownCode(String),
+    #[error("Unable to decode bytes into UTF-8 string {0}")]
     Utf8Err(#[from] std::string::FromUtf8Error),
+    #[error("Unable to decode bytes into UTF-16 string {0}")]
     Utf16Err(#[from] std::string::FromUtf16Error),
 }
 
-impl std::fmt::Display for DataTypeError {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        match *self {
-            DataTypeError::UnknownCode(ref value) => {
-                write!(f, "DataTypeError: Unknown value encoding: 0x{}", value)
-            }
-            DataTypeError::Utf8Err(ref err) => {
-                write!(
-                    f,
-                    "DataTypeError: Unable to decode bytes into UTF-8 string {}",
-                    err.to_string()
-                )
-            }
-            DataTypeError::Utf16Err(ref err) => {
-                write!(
-                    f,
-                    "DataTypeError: Unable to decode bytes into UTF-16 string {}",
-                    err.to_string()
-                )
-            }
-        }
-    }
-}
-
-#[derive(ThisError, Debug)]
+#[derive(Error, Debug)]
 pub enum Error {
-    #[error(transparent)]
+    #[error("Datatype error: {0}")]
     DataTypeError(#[from] DataTypeError),
 
     #[error("Unable to read file")]
@@ -54,9 +27,9 @@ pub enum Error {
     #[error("Error parsing file with ole: {}", .source)]
     OleError {
         #[from]
-        source: OleError,
+        source: crate::ole::Error,
     },
 
     #[error(transparent)]
-    SerdeJsonError(#[from] SerdeError),
+    SerdeJsonError(#[from] serde_json::Error),
 }
