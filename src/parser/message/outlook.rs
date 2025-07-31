@@ -32,7 +32,7 @@ impl Outlook {
     fn parse(storages: Storages) -> Self {
         let headers = Self::parse_headers(&storages.root);
         let body = storages.root.get("Body").map(|dt| dt.into()).unwrap_or_default();
-        let html = storages.root.get("Body").map(|dt| dt.into());
+        let html = storages.root.get("Html").map(|dt| dt.into());
         let attachments = Self::extract_attachments(&storages.attachments);
 
         Self {
