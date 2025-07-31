@@ -24,8 +24,6 @@ impl Outlook {
         let mut storages = Storages::new(&reader);
         storages.process_streams(&reader);
 
-        println!("{:?}", storages.attachments);
-
         let message = Self::parse(storages);
 
         Ok(message)
